@@ -37,7 +37,8 @@ data class MessageThread(
     val lastHasAttachment: Boolean = false,
 ) {
     val isGroup: Boolean get() = participants.size > 1
-    val title: String get() = participants.joinToString(", ") { it.name.substringBefore(' ') }
+    // First names for people; numbers without a saved name stay whole ("+1 (312) 555-0199", not "+1").
+    val title: String get() = participants.joinToString(", ") { if (it.name.first().isLetter()) it.name.substringBefore(' ') else it.name }
 }
 
 enum class DeliveryStatus { SENDING, SENT, DELIVERED, FAILED }

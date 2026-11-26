@@ -238,4 +238,11 @@ class PlansPresenterTest {
         assertEquals("₹1,299", cards[1].price)
         assertEquals("Pro · renews automatically", PlansPresenter.entitlementLabel(pro))
     }
+
+    @Test
+    fun conversationTitlesUseFirstNamesButKeepUnsavedNumbersWhole() {
+        val threads = SampleData.threads(SampleData.FIXED_NOW).associateBy { it.id }
+        assertEquals("Daniel, Priya, Lucas", threads.getValue("t-launch").title)
+        assertEquals("+1 (312) 555-0199", threads.getValue("t-pharmacy").title)
+    }
 }
