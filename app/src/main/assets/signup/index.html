@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CallBridge signup</title>
+<style>
+  :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+  body { margin: 0; padding: 24px; background: #f8f9ff; color: #1a1c20; }
+  @media (prefers-color-scheme: dark) { body { background: #10131a; color: #e2e2e9; } .plan { background: #1c2026 !important; } }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  p { color: #5b5e66; margin: 0 0 20px; }
+  label { display: block; font-size: 14px; margin: 16px 0 6px; }
+  input[type=email] { width: 100%; box-sizing: border-box; padding: 14px; font-size: 16px; border: 1px solid #8a8d96; border-radius: 10px; }
+  .plan { display: flex; justify-content: space-between; align-items: center; background: #ebeef5; border-radius: 12px; padding: 14px; margin: 8px 0; }
+  .plan input { margin-right: 10px; }
+  button { margin-top: 24px; width: 100%; padding: 16px; font-size: 16px; border: 0; border-radius: 24px; background: #1f5ead; color: #fff; }
+  .step { font-size: 13px; color: #1f5ead; font-weight: 600; letter-spacing: .04em; }
+</style>
+</head>
+<body>
+  <div class="step">STEP 1 OF 2 · WEB</div>
+  <h1>Get your second number</h1>
+  <p>Pick a plan here; you'll verify your phone and pay securely with Google Play in the app.</p>
+  <form id="signup">
+    <label for="email">Email</label>
+    <input id="email" type="email" required placeholder="you@example.com">
+    <label>Plan</label>
+    <div class="plan"><span><input type="radio" name="plan" value="callbridge_basic_monthly">Basic · 1 number</span><b>$9.99/mo</b></div>
+    <div class="plan"><span><input type="radio" name="plan" value="callbridge_pro_monthly" checked>Pro · 2 numbers</span><b>$15.99/mo</b></div>
+    <div class="plan"><span><input type="radio" name="plan" value="callbridge_business_monthly">Business · 5 numbers</span><b>$29.99/mo</b></div>
+    <button type="submit">Continue in the app</button>
+  </form>
+<script>
+  // In production the session token comes from the signup API; here it's generated for the demo.
+  function demoSessionToken() {
+    const bytes = new Uint8Array(24);
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+  }
+  document.getElementById('signup').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const plan = document.querySelector('input[name=plan]:checked').value;
+    const email = document.getElementById('email').value;
+    const url = 'https://callbridge.example.com/app/handoff'
+      + '?session=' + demoSessionToken()
+      + '&plan=' + encodeURIComponent(plan)
+      + '&email=' + encodeURIComponent(email);
+    window.location.href = url;
+  });
+</script>
+</body>
+</html>
